@@ -5,6 +5,13 @@
 #include <string>
 #include <vector>
 
+// for portability of M_PI (Vis Studio, MinGW, etc.)
+#ifndef M_PI
+const double M_PI = 3.14159265358979323846;
+#endif
+
+
+
 // for convenience
 using std::string;
 using std::vector;
