@@ -124,17 +124,17 @@ int main() {
 										too_close = true;
 									}
 								}// check the other cars in my left lane if my car is in middle lane or right lane
-								else if (lane > 0 && d < (2 + 4 * lane - 2)) {
+								else if (lane > 0 && d < (2 + 4 * lane - 2) && d > (2 + 4 * lane - 6)) {
 
-									if (s_dist < 10) {
+									if (s_dist < 15) {
 										car_in_left_lane = true;
 									}
 									if (s_dist < 50) {
 										left_lane_clear = false;
 									}
 								}// check the other cars in my right lane if my car is in middle lane or left lane
-								else if (lane < 2 && d >(2 + 4 * lane + 2)) {
-									if (s_dist < 10) {
+								else if (lane < 2 && d >(2 + 4 * lane + 2) && d < (2 + 4 * lane + 6)) {
+									if (s_dist < 15) {
 										car_in_right_lane = true;
 									}
 									if (s_dist < 50) {
@@ -145,7 +145,7 @@ int main() {
 							}
 							if (too_close) {
 								//change lane
-								if (time_since_last_lane_change > 5) {
+								if (time_since_last_lane_change > 10) {
 									if (left_lane_clear && lane > 0) {
 										lane--;
 									}
@@ -169,7 +169,7 @@ int main() {
 							}
 							else {
 								// change back to middle lane if possible
-								if ((time_since_last_lane_change > 5) && (lane == 0 && right_lane_clear || lane == 2 && left_lane_clear)) {
+								if ((time_since_last_lane_change > 20 ) && (lane == 0 && right_lane_clear || lane == 2 && left_lane_clear)) {
 									lane = 1;
 								}
 								if (ref_vel < 49.5) {
