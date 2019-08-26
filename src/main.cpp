@@ -16,7 +16,8 @@ using std::vector;
 double ref_vel = 0;
 //start with lane 1 (mid lane)
 int lane = 1;
-
+int prev_lane = 1;
+double time_since_last_lane_change = 0;
 int main() {
 	uWS::Hub h;
 
@@ -74,12 +75,9 @@ int main() {
 
 					if (s != "") {
 						auto j = json::parse(s);
-
 						string event = j[0].get<string>();
-
 						if (event == "telemetry") {
 							// j[1] is the data JSON object
-
 							// Main car's localization Data
 							double car_x = j[1]["x"];
 							double car_y = j[1]["y"];
@@ -87,56 +85,105 @@ int main() {
 							double car_d = j[1]["d"];
 							double car_yaw = j[1]["yaw"];
 							double car_speed = j[1]["speed"];
-
 							// Previous path data given to the Planner
 							auto previous_path_x = j[1]["previous_path_x"];
 							auto previous_path_y = j[1]["previous_path_y"];
 							// Previous path's end s and d values 
 							double end_path_s = j[1]["end_path_s"];
 							double end_path_d = j[1]["end_path_d"];
-							// Sensor Fusion Data, a list of all other cars on the same side 
-							//   of the road.
+							// Sensor Fusion Data, a list of all other cars on the same side of the road.
 							auto sensor_fusion = j[1]["sensor_fusion"];
-
 							//get the path size
 							int prev_size = previous_path_x.size();
-
 							//sensor fusion data collision avoidance logic
+
+
 							if (prev_size > 0) {
 								car_s = end_path_s;
+								car_d = end_path_d;
 							}
 							bool too_close = false;
+							bool car_in_left_lane = false;
+							bool car_in_right_lane = false;
+							bool left_lane_clear = true;
+							bool right_lane_clear = true;
 							//loop through all the cars that sesor funsion detected
 							for (int i = 0; i < sensor_fusion.size(); i++) {
-
+								double vx = sensor_fusion[i][3];
+								double vy = sensor_fusion[i][4];
+								double check_speed = sqrt(vx * vx + vy * vy);
+								double check_car_s = sensor_fusion[i][5];
 								float d = sensor_fusion[i][6];
-								//if the other car is in my lane
+								// predict at where is this car in future (next few 0.02 secs)
+								check_car_s += ((double)prev_size * .02 * check_speed);
+								double s_dist = fabs(check_car_s - car_s);
+								//ifthis ar is in my lane
 								if (d<(2 + 4 * lane + 2) && d>(2 + 4 * lane - 2)) {
-									double vx = sensor_fusion[i][3];
-									double vy = sensor_fusion[i][4];
-									double check_speed = sqrt(vx * vx + vy * vy);
-									double check_car_s = sensor_fusion[i][5];
-
-									// look at where is our car in future (next few 0.02 secs)
-									check_car_s += ((double)prev_size * .02 * check_speed);
 									//if the car is close to our car (less than 30
-									if ((check_car_s > car_s) && ((check_car_s - car_s) < 15)) {
-										//reduce speed
+									if ((check_car_s > car_s) && ((check_car_s - car_s) < 30)) {
 										too_close = true;
+									}
+								}// check the other cars in my left lane if my car is in middle lane or right lane
+								else if (lane > 0 && d < (2 + 4 * lane - 2)) {
 
+									if (s_dist < 10) {
+										car_in_left_lane = true;
+									}
+									if (s_dist < 50) {
+										left_lane_clear = false;
+									}
+								}// check the other cars in my right lane if my car is in middle lane or left lane
+								else if (lane < 2 && d >(2 + 4 * lane + 2)) {
+									if (s_dist < 10) {
+										car_in_right_lane = true;
+									}
+									if (s_dist < 50) {
+										right_lane_clear = false;
 									}
 
 								}
-
 							}
-
 							if (too_close) {
-								ref_vel -= .224;
+								//change lane
+								if (time_since_last_lane_change > 5) {
+									if (left_lane_clear && lane > 0) {
+										lane--;
+									}
+									else if (right_lane_clear && lane < 2) {
+										lane++;
+									}
+									else if (!car_in_left_lane && lane > 0) {
+
+										lane--;
+									}
+									else if (!car_in_right_lane && lane < 2) {
+										lane++;
+									}
+									else {
+										ref_vel -= .224;
+									}
+								}
+								else {
+									ref_vel -= .224;
+								}
 							}
-							else if (ref_vel < 49.5) {
-								ref_vel += .224;
+							else {
+								// change back to middle lane if possible
+								if ((time_since_last_lane_change > 5) && (lane == 0 && right_lane_clear || lane == 2 && left_lane_clear)) {
+									lane = 1;
+								}
+								if (ref_vel < 49.5) {
+									ref_vel += .224;
+								}
 							}
 
+
+							if (prev_lane != lane) {
+								time_since_last_lane_change = 0;
+								prev_lane = lane;
+
+							}
+							time_since_last_lane_change += 0.02;
 
 							//a list of widely spaced (x,y) waypoints ,spaced at 30 m
 							vector<double> ptsx;
@@ -223,12 +270,9 @@ int main() {
 								double N = (target_dist / (.02 * ref_vel / 2.24));
 								double x_point = x_add_on + (target_x / N);
 								double y_point = s(x_point);
-
 								x_add_on = x_point;
-
 								double x_temp = x_point;
 								double y_temp = y_point;
-
 								//inverse transform - need to backto global coordniater
 								x_point = (x_temp * cos(ref_yaw) - y_temp * sin(ref_yaw));
 								y_point = (x_temp * sin(ref_yaw) + y_temp * cos(ref_yaw));
