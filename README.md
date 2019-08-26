@@ -1,6 +1,6 @@
 [//]: # (Image References)
 [image1]: result_screenshot.PNG  "result screenshot"
-[image2]: result_screenshot_error.PNG  "result screenshot with  error"
+[image2]: result_screenshot_error.PNG  "result screenshot with error"
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
    
@@ -95,6 +95,7 @@ I ran the simulator for 4.18 miles without incident.
 ![4.10 miles][image1]
 
 However, it seems related to my environment set up, an error popped up everytime after driving for 4.18 miles.
+
 ![error screenshot][image2]
 2. The car drives according to the speed limit.
    *No speed limit red message was seen.
