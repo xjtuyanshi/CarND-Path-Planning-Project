@@ -1,3 +1,6 @@
+[//]: # (Image References)
+[image1]: result_screenshot.PNG  "result screenshot"
+[image2]: result_screenshot_error.PNG  "result screenshot with  error"
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
    
@@ -89,10 +92,10 @@ Here is the data provided from the Simulator to the C++ Program
 1.  The car is able to drive at least 4.32 miles without incident.
 I ran the simulator for 4.18 miles without incident.
 
-![4.10 miles](/result_screenshot.png)
+![4.10 miles][image1]
 
 However, it seems related to my environment set up, an error popped up everytime after driving for 4.18 miles.
-![error screenshot](result_screenshot_error.png)
+![error screenshot][image2]
 2. The car drives according to the speed limit.
    *No speed limit red message was seen.
 3. Max Acceleration and Jerk are not Exceeded.
