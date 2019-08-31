@@ -85,8 +85,8 @@ Here is the data provided from the Simulator to the C++ Program
    * if too close, reduce speed 
 3. Lane changing (line 105- 186)
    * Try to stay in one lane until if the car in front is slow and there is saftey space of other lanes, change lane.
-   * Change back to middle lane - after lane changing, if middle lane is also clear, change back to middle lane
-   *Recude lane change frequency by adding timer to count the time since last lane change ( ~10 sec)
+   * Back to middle lane : after lane changing, if middle lane is also clear, change back to middle lane
+   * Recude lane change frequency by adding timer to count the time since last lane change ( ~10 sec)
 
 ## Project Rubric Points
 1.  The car is able to drive at least 4.32 miles without incident.
