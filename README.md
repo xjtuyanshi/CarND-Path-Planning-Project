@@ -77,16 +77,16 @@ Here is the data provided from the Simulator to the C++ Program
     ```
 ## Implemetations
 1. Lane Following -basic trajectory generation (Line 187 -284)
-   *Spline library was used to generate smooth driving curve
-   *Use Frenet coordinate system to make sure the car stays in the lane(d is constant)
+   * Spline library was used to generate smooth driving curve
+   * Use Frenet coordinate system to make sure the car stays in the lane(d is constant)
 2. Jerk minimizing and collision avoidance (line 146-169)
-   *slowly increase speed to minimize the initial jerk
-   *use sensor fusion data to decect the distance(s) between the ego car and the car in front of it.
-   *if too close, reduce speed 
+   * slowly increase speed to minimize the initial jerk
+   * use sensor fusion data to decect the distance(s) between the ego car and the car in front of it.
+   * if too close, reduce speed 
 3. Lane changing (line 105- 186)
    * Try to stay in one lane until if the car in front is slow and there is saftey space of other lanes, change lane.
    * Change back to middle lane - after lane changing, if middle lane is also clear, change back to middle lane
-   * Recude lane change frequency by adding timer to count the time since last lane change ( ~10 sec)
+   *Recude lane change frequency by adding timer to count the time since last lane change ( ~10 sec)
 
 ## Project Rubric Points
 1.  The car is able to drive at least 4.32 miles without incident.
@@ -96,9 +96,9 @@ Here is the data provided from the Simulator to the C++ Program
 3. Max Acceleration and Jerk are not Exceeded.
 4. Car does not have collisions.
 5. The car stays in its lane, except for the time between changing lanes.
-   *The car stays in its lane most of the time only changing lanes when necessary
+   * The car stays in its lane most of the time only changing lanes when necessary
 6. The car is able to change lanes
-   *The car is able to smoothly change lanes when it makes sense to do so, such as when behind a slower moving car and an adjacent lane is clear of other traffic
+   * The car is able to smoothly change lanes when it makes sense to do so, such as when behind a slower moving car and an adjacent lane is clear of other traffic
 
 
 
