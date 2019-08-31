@@ -75,7 +75,7 @@ Here is the data provided from the Simulator to the C++ Program
     cd uWebSockets
     git checkout e94b6e1
     ```
-## implemetations
+## Implemetations
 1. Lane Following -basic trajectory generation (Line 187 -284)
    *Spline library was used to generate smooth driving curve
    *Use Frenet coordinate system to make sure the car stays in the lane(d is constant)
@@ -90,13 +90,7 @@ Here is the data provided from the Simulator to the C++ Program
 
 ## Project Rubric Points
 1.  The car is able to drive at least 4.32 miles without incident.
-I ran the simulator for 4.18 miles without incident.
-
 ![4.10 miles][image1]
-
-However, it seems related to my environment set up, an error popped up everytime after driving for 4.18 miles.
-
-![error screenshot][image2]
 2. The car drives according to the speed limit.
    * No speed limit red message was seen.
 3. Max Acceleration and Jerk are not Exceeded.
